@@ -60,8 +60,7 @@ func getHostname(ip string) string {
 	return strings.Join(names, " ")
 }
 
-// https://husobee.github.io/golang/ip-address/2015/12/17/remote-ip-go.html
-func getIpAddress_merge(r *http.Request) string {
+func getIpAddress(r *http.Request) string {
 	for _, h := range []string{"X-Forwarded-For", "X-Real-Ip"} {
 		addresses := strings.Split(r.Header.Get(h), ",")
 		// march from right to left until we get a public address
@@ -77,27 +76,8 @@ func getIpAddress_merge(r *http.Request) string {
 			return ip
 		}
 	}
-	return ""
-}
-
-func getIpAddress(r *http.Request) string {
-	hdr := r.Header
-	hdrRealIp := hdr.Get("X-Real-Ip")
-	hdrForwardedFor := hdr.Get("X-Forwarded-For")
-	if hdrRealIp == "" && hdrForwardedFor == "" {
-		hdrRealIp, _, _ := net.SplitHostPort(r.RemoteAddr)
-		return hdrRealIp
-	}
-	if hdrForwardedFor != "" {
-		// X-Forwarded-For is potentially a list of addresses separated with ","
-		parts := strings.Split(hdrForwardedFor, ",")
-		for i, p := range parts {
-			parts[i] = strings.TrimSpace(p)
-		}
-		// TODO: should return first non-local address
-		return parts[0]
-	}
-	return hdrRealIp
+	realIP, _, _ := net.SplitHostPort(r.RemoteAddr)
+	return realIP
 }
 
 func init() {
