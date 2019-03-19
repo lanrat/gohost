@@ -55,7 +55,7 @@ func HostHandler(w http.ResponseWriter, r *http.Request) {
 func HeaderHandler(w http.ResponseWriter, r *http.Request) {
 	ip := getIpAddress(r)
 	log.Printf("header request from : %s\n", ip)
-	for k, v:= range r.Header {
+	for k, v := range r.Header {
 		fmt.Fprintf(w, "%s:%v\n", k, v)
 	}
 }
@@ -93,6 +93,7 @@ func init() {
 	fmt.Printf("Started server at %v.\n", addr_port)
 	http.HandleFunc("/", AllHandler)
 	http.HandleFunc("/ip", IpHandler)
+	http.HandleFunc("/i", IpHandler)
 	http.HandleFunc("/host", HostHandler)
 	http.HandleFunc("/headers", HeaderHandler)
 	http.ListenAndServe(addr_port, nil)
