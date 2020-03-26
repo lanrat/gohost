@@ -60,12 +60,12 @@ func HeaderHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "text/plain; charset=utf-8")
 	ip := getIpAddress(r)
 	log.Printf("header request from : %s\n", ip)
-	for k, v := range r.Header {
-		fmt.Fprintf(w, "%s:%v\n", k, v)
+	for _, k := range sortHeaders(r.Header) {
+		fmt.Fprintf(w, "%s:%v\n", k, r.Header[k])
 	}
 }
 
-func sortMapKeys(m map[string]interface{}) []string {
+func sortHeaders(m http.Header) []string {
 	out := make([]string, len(m))
 	i := 0
 	for k := range m {

@@ -1,6 +1,6 @@
 # GOHOST
 
-A simple microservice to display a HTTP client's IP, hostname, and Owner.
+A simple microservice to display a HTTP client's IP, hostname, headers, and owner.
 
 
 ## Example
