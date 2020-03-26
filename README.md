@@ -24,6 +24,11 @@ return just the IP
 return just the hostname
 
 
+### /headers
+
+return all the http headers
+
+
 ## Running
 
 Run as a docker service `lanrat/gohost` or local binary.

@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"sort"
 	"strings"
 
 	"github.com/digineo/ripego"
@@ -23,6 +24,7 @@ func initSettings() {
 }
 
 func AllHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "text/plain; charset=utf-8")
 	ip := getIpAddress(r)
 	name := getHostname(ip)
 	log.Printf("IP: %s\n", ip)
@@ -40,12 +42,14 @@ func AllHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func IpHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "text/plain; charset=utf-8")
 	ip := getIpAddress(r)
 	log.Printf("IP: %s\n", ip)
 	fmt.Fprintf(w, "%s\n", ip)
 }
 
 func HostHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "text/plain; charset=utf-8")
 	ip := getIpAddress(r)
 	name := getHostname(ip)
 	log.Printf("IP: %s\n", ip)
@@ -53,11 +57,23 @@ func HostHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func HeaderHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "text/plain; charset=utf-8")
 	ip := getIpAddress(r)
 	log.Printf("header request from : %s\n", ip)
 	for k, v := range r.Header {
 		fmt.Fprintf(w, "%s:%v\n", k, v)
 	}
+}
+
+func sortMapKeys(m map[string]interface{}) []string {
+	out := make([]string, len(m))
+	i := 0
+	for k := range m {
+		out[i] = k
+		i++
+	}
+	sort.Strings(out)
+	return out
 }
 
 func getHostname(ip string) string {
